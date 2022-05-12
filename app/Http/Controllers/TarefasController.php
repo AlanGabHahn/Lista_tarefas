@@ -26,24 +26,19 @@ class TarefasController extends Controller
 
     public function store(Request $request){
 
+        $request ->validate([
 
+            'titulo' => [ 'required', 'string' ]
 
-        if($request->filled('titulo')) {
+        ]);
 
-            $titulo = $request->input('titulo');
+        $titulo = $request->input('titulo');
 
-            DB::insert('INSERT INTO tarefas (titulo) VALUES (:titulo)', [
-                'titulo' => $titulo
-            ]);
+        DB::insert('INSERT INTO tarefas (titulo) VALUES (:titulo)', [
+            'titulo' => $titulo
+        ]);
 
-            return  redirect()->route('tarefas.index');
-
-        } else {
-
-            return redirect()
-            ->route('tarefas.add')
-            ->with('warning', 'Título não preenchido.');
-        }
+        return  redirect()->route('tarefas.index');
 
     }
 
@@ -69,34 +64,21 @@ class TarefasController extends Controller
 
     public function editAction(Request $request, $id){
 
-        if($request->filled('titulo')){
+        $request ->validate([
 
-            $titulo = $request->input('titulo');
+            'titulo' => [ 'required', 'string' ]
 
-            $data = DB::select('select * from tarefas where id = :id', [
-                'id' =>$id
-            ]);
+        ]);
 
-            if(count($data) > 0){
+        $titulo = $request->input('titulo');
 
-                DB::update('update tarefas set titulo = :titulo where id = :id', [
-                    'id' => $id,
-                    'titulo' => $titulo
-                ]);
+        DB::update('update tarefas set titulo = :titulo where id = :id', [
+            'id' => $id,
+            'titulo' => $titulo
+        ]);
 
+        return redirect()->route('tarefas.index');
 
-
-            }
-
-            return redirect()->route('tarefas.index');
-
-        } else {
-
-            return redirect()
-            ->route('tarefas.edit', ['id' => $id])
-            ->with('warning', 'Título não preenchido.');
-
-        }
     }
 
     public function del($id){

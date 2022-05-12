@@ -6,12 +6,15 @@
 
     <h1>Adição</h1>
 
-   @if (session('warning'))
+    @if ($errors->any())
+
         <div>
-            {{session('warning')}}
+            @foreach ($errors->all() as $error )
+                {{ $error }}<br>
+            @endforeach
         </div>
 
-   @endif
+    @endif
 
     <form method="POST">
         @csrf

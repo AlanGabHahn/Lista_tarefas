@@ -6,11 +6,12 @@
 
     <h1>Edição</h1>
 
-    @if (session('warning'))
-    <div>
-        {{session('warning')}}
-    </div>
-
+    @if ($errors->any())
+        <div>
+            @foreach ($errors->all() as $error )
+                {{ $error }}<br>
+            @endforeach
+        </div>
     @endif
 
     <form method="POST">
