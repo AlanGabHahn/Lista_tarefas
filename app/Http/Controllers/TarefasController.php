@@ -99,10 +99,23 @@ class TarefasController extends Controller
         }
     }
 
-    public function del(){
+    public function del($id){
+
+        DB::delete('DELETE FROM tarefas where id = :id', [
+            'id' => $id
+        ]);
+
+        return redirect()->route('tarefas.index');
 
     }
-    public function done(){
+
+    public function done($id){
+
+        DB::update('update tarefas set resolvido = 1 - resolvido where id = :id', [
+            'id' => $id
+        ]);
+
+        return redirect()->route('tarefas.index');
 
     }
 }
