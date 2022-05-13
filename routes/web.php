@@ -19,7 +19,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route:get('/exemplo', [ExemploController::class, 'index']);
+//Route::get('/exemplo', [ExemploController::class, 'index']);
+/***********************************************************
+ * Route::resource('exemplo',[ExemploController::class])   *
+ * GET - /exemplo - index - exemplo.index -> Enviar dados  *
+ * GET - /exemplo/create - create - exemplo.index          *
+ * POST - /exemplo - store - exemplo.store -> Receber dados*                                   *
+ ***********************************************************/
 Route::prefix('/tarefas')->group(function(){
 
     Route::get('/', [TarefasController::class, 'index'])->name('tarefas.index'); //Listagem de tarefas

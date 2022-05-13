@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Tarefa;
 
 class TarefasController extends Controller
 {
 
     public function index(){
 
-        $list = DB::select('SELECT * FROM tarefas');
+        //$list = DB::select('SELECT * FROM tarefas');
+        $list = Tarefa::all();
 
         return view('tarefas.index', [
             'list' => $list
@@ -34,9 +36,10 @@ class TarefasController extends Controller
 
         $titulo = $request->input('titulo');
 
-        DB::insert('INSERT INTO tarefas (titulo) VALUES (:titulo)', [
-            'titulo' => $titulo
-        ]);
+        $t = new Tarefa;
+        $t->titulo = $titulo;
+        $t->save();
+
 
         return  redirect()->route('tarefas.index');
 
@@ -44,14 +47,12 @@ class TarefasController extends Controller
 
     public function edit($id){
 
-        $data = DB::select('select * from tarefas where id = :id', [
-            'id' => $id
-        ]);
+        $data =  Tarefa::find($id);
 
-        if(count($data) > 0) {
+        if($data) {
 
             return view('tarefas.edit', [
-                'data' => $data[0]
+                'data' => $data
             ]);
 
         } else {
@@ -72,10 +73,15 @@ class TarefasController extends Controller
 
         $titulo = $request->input('titulo');
 
-        DB::update('update tarefas set titulo = :titulo where id = :id', [
-            'id' => $id,
-            'titulo' => $titulo
-        ]);
+        /**************************************************
+         * Podemos utilizar também a opção:               *
+         * Tarefa::find($id)->update(['titulo'=>$titulo]);*
+         **************************************************/
+
+        $t = Tarefa::find($id);
+        $t->titulo = $titulo;
+        $t->save();
+
 
         return redirect()->route('tarefas.index');
 
@@ -83,9 +89,7 @@ class TarefasController extends Controller
 
     public function del($id){
 
-        DB::delete('DELETE FROM tarefas where id = :id', [
-            'id' => $id
-        ]);
+        Tarefa::find($id)->delete();
 
         return redirect()->route('tarefas.index');
 
@@ -93,9 +97,12 @@ class TarefasController extends Controller
 
     public function done($id){
 
-        DB::update('update tarefas set resolvido = 1 - resolvido where id = :id', [
-            'id' => $id
-        ]);
+        $t = Tarefa::find($id);
+
+        if($t){
+            $t->resolvido = 1 - $t->resolvido;
+            $t->save();
+        }
 
         return redirect()->route('tarefas.index');
 

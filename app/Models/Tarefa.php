@@ -9,8 +9,7 @@ class Tarefa extends Model
 {
     use HasFactory;
 
-    protected $table = 'tarefas';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
+    public $timestamps = false;
+    protected $fillable = [ 'titulo' ];
 
 }
