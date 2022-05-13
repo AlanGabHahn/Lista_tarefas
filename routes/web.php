@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TarefasController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,8 @@ Route::get('/', function () {
  * GET - /exemplo/create - create - exemplo.index          *
  * POST - /exemplo - store - exemplo.store -> Receber dados*                                   *
  ***********************************************************/
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+
 Route::prefix('/tarefas')->group(function(){
 
     Route::get('/', [TarefasController::class, 'index'])->name('tarefas.index'); //Listagem de tarefas
@@ -41,3 +44,7 @@ Route::prefix('/tarefas')->group(function(){
     Route::get('marcar/{id}', [TarefasController::class, 'done'])->name('tarefas.done'); // Marcar resolvido S/N
 
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
